@@ -161,3 +161,4 @@ cython_debug/
 
 # Vcard
 *.vcf
+*.dict.yaml
