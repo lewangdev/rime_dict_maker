@@ -5,7 +5,7 @@ description = "Convert iCloud vcard to rime dict file"
 authors = [
     { name = "Le Wang", email = "lewang.dev@gmail.com" }
 ]
-dependencies = []
+dependencies = ["pypinyin~=0.48.0"]
 readme = "README.md"
 requires-python = ">= 3.8"
 license = { text = "MIT" }
@@ -16,3 +16,4 @@ build-backend = "hatchling.build"
 
 [tool.rye]
 managed = true
+dev-dependencies = ["black~=23.3.0", "pycodestyle~=2.10.0"]

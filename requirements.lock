@@ -1,1 +1,2 @@
 -e file:///Users/lewang/Workspaces/github.com/lewangdev/vcard2rimedict
+pypinyin==0.48.0
