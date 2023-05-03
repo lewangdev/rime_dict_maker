@@ -2,7 +2,7 @@
 
 ## TODOs
 
-- [-] iCloud vcard
+- [x] iCloud vcard
 - [ ] Epub books
 - [ ] txt and html files
 - [ ] sogou scel files
