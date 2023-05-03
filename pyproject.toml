@@ -17,3 +17,6 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = ["black~=23.3.0", "pycodestyle~=2.10.0"]
+
+[tool.rye.scripts]
+make = "python rime_dict_maker.py"
