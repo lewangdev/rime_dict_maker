@@ -1,4 +1,4 @@
--e file:///Users/lewang/Workspaces/github.com/lewangdev/vcard2rimedict
+-e file:///Users/lewang/Workspaces/github.com/lewangdev/rime_dict_maker
 black==23.3.0
 click==8.1.3
 mypy-extensions==1.0.0

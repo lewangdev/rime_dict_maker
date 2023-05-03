@@ -1,57 +1,49 @@
-import pypinyin
+from pypinyin import pinyin_dict, lazy_pinyin
 from datetime import datetime
-initials_set = set(pypinyin.style._constants._INITIALS)
+import os
 
 
-def check_zhchar(phrase):
+def check_chinese_char(phrase):
+    if len(phrase) == 0:
+        return False
     for c in phrase:
-        if ord(c) not in pypinyin.pinyin_dict.pinyin_dict:
+        if ord(c) not in pinyin_dict.pinyin_dict:
             return False
     return True
 
 
-def convert2pinyin(name):
-    name_pinyin = []
-    for v in name.split():
-        if len(v) == 2:
-            if not check_zhchar(v[0]):
-                continue
-
-            pinyin = pypinyin.lazy_pinyin(v[0])
-            for p in pinyin:
-                if p in initials_set:
-                    break
-            else:
-                name_pinyin.append(''.join(pinyin)) 
-
-    return ''.join(name_pinyin)
+def to_pinyin(name):
+    name_pinyin = lazy_pinyin(name, errors='ignore')
+    return ' '.join(name_pinyin)
 
 
-def get_names(vcardfilepath, line_prefix="N:"):
+def to_contact_dict(line_prefix="N:", weight=100000):
     result = f"""---
 name: contact
 version: "{datetime.now().strftime('%Y-%m-%d')}"
 sort: by_weight
 ...
 
-    """
+"""
+    vcard_files = list(filter(lambda x: x.endswith(".vcf"), [
+        i for i in os.listdir("./contact")]))
 
-    with open(vcardfilepath, 'r') as f:
-        lines = f.readlines()
+    for vcard_file in vcard_files:
+        with open(os.path.join("./contact", vcard_file), 'r') as f:
+            lines = f.readlines()
 
-        for line in lines:
-            if line.startswith(line_prefix):
-                name = line[2:-1].replace(';', '')
-                name_pinyin = convert2pinyin(name)
-                result += name + '\t' + ' '.join(name_pinyin) + '\t' + '10000' + '\n'
+            for line in lines:
+                if line.startswith(line_prefix):
+                    name = line[2:-1].replace(';', '')
+                    if not check_chinese_char(name):
+                        continue
+                    name_pinyin = to_pinyin(name)
+                    result += f"{name}\t{name_pinyin}\t{weight}\n"
     return result
 
 
 if __name__ == "__main__":
-    vcardfilepath = "./vcard/iCloud vCard.vcf"
-    result = get_names(vcardfilepath)
+    result = to_contact_dict()
 
-    with open('contact.dict.yaml', 'w') as f:
+    with open(os.path.join("./out", "contact.dict.yaml"), 'w') as f:
         f.write(result)
-
-
